@@ -2,6 +2,7 @@ package com.polytech.olympic_medals.service.impl;
 
 import com.polytech.olympic_medals.dto.request.CompetitionRequest;
 import com.polytech.olympic_medals.dto.response.CompetitionResponse;
+import com.polytech.olympic_medals.exception.ResourceNotFoundException;
 import com.polytech.olympic_medals.model.Competition;
 import com.polytech.olympic_medals.model.StatutCompetition;
 import com.polytech.olympic_medals.repository.CompetitionRepository;
@@ -37,8 +38,7 @@ public class CompetitionServiceImpl implements CompetitionService {
     @Transactional(readOnly = true)
     public CompetitionResponse obtenirCompetitionParId(Long id) {
         Competition competition = competitionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(
-                    "Compétition non trouvée avec l'ID : " + id
+                .orElseThrow(() -> new ResourceNotFoundException("Compétition", id
                 ));
         return toResponse(competition);
     }
@@ -55,8 +55,7 @@ public class CompetitionServiceImpl implements CompetitionService {
     @Override
     public CompetitionResponse modifierCompetition(Long id, CompetitionRequest request) {
         Competition competition = competitionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(
-                    "Compétition non trouvée avec l'ID : " + id
+                .orElseThrow(() -> new ResourceNotFoundException("Compétition", id
                 ));
 
         competition.setNom(request.getNom());
@@ -74,7 +73,7 @@ public class CompetitionServiceImpl implements CompetitionService {
     @Override
     public void supprimerCompetition(Long id) {
         if (!competitionRepository.existsById(id)) {
-            throw new RuntimeException("Compétition non trouvée avec l'ID : " + id);
+            throw new ResourceNotFoundException("Compétition", id);
         }
         competitionRepository.deleteById(id);
         log.debug("Compétition supprimée avec succès, ID : {}", id);

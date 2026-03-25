@@ -3,6 +3,8 @@ package com.polytech.olympic_medals.service.impl;
 import com.polytech.olympic_medals.dto.request.AthleteRequest;
 import com.polytech.olympic_medals.dto.response.AthleteResponse;
 import com.polytech.olympic_medals.dto.response.PaysResponse;
+import com.polytech.olympic_medals.exception.DuplicateResourceException;
+import com.polytech.olympic_medals.exception.ResourceNotFoundException;
 import com.polytech.olympic_medals.model.Athlete;
 import com.polytech.olympic_medals.model.Pays;
 import com.polytech.olympic_medals.repository.AthleteRepository;
@@ -30,13 +32,11 @@ public class AthleteServiceImpl implements AthleteService {
         log.debug("Création d'un athlète : {} {}", request.getPrenom(), request.getNom());
 
         Pays pays = paysRepository.findById(request.getPaysId())
-                .orElseThrow(() -> new RuntimeException(
-                    "Pays non trouvé avec l'ID : " + request.getPaysId()
-                ));
+                .orElseThrow(() -> new ResourceNotFoundException("Pays", request.getPaysId()));
 
         if (athleteRepository.existsByNomAndPrenomAndPaysId(
                 request.getNom(), request.getPrenom(), request.getPaysId())) {
-            throw new IllegalArgumentException("Cet athlète existe déjà pour ce pays");
+            throw new DuplicateResourceException("Cet athlète existe déjà pour ce pays");
         }
 
         Athlete athlete = toEntity(request, pays);
@@ -50,7 +50,7 @@ public class AthleteServiceImpl implements AthleteService {
     @Transactional(readOnly = true)
     public AthleteResponse obtenirAthleteParId(Long id) {
         Athlete athlete = athleteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Athlète non trouvé avec l'ID : " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Athlète", id));
         return toResponse(athlete);
     }
 
@@ -67,7 +67,7 @@ public class AthleteServiceImpl implements AthleteService {
     @Transactional(readOnly = true)
     public List<AthleteResponse> obtenirAthleteParPays(Long paysId) {
         if (!paysRepository.existsById(paysId)) {
-            throw new RuntimeException("Pays non trouvé avec l'ID : " + paysId);
+            throw new ResourceNotFoundException("Pays", paysId);
         }
         return athleteRepository.findByPaysId(paysId)
                 .stream()
@@ -78,11 +78,10 @@ public class AthleteServiceImpl implements AthleteService {
     @Override
     public AthleteResponse modifierAthlete(Long id, AthleteRequest request) {
         Athlete athlete = athleteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Athlète non trouvé avec l'ID : " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Athlète", id));
 
         Pays pays = paysRepository.findById(request.getPaysId())
-                .orElseThrow(() -> new RuntimeException(
-                    "Pays non trouvé avec l'ID : " + request.getPaysId()
+                .orElseThrow(() -> new ResourceNotFoundException("Pays", request.getPaysId()
                 ));
 
         athlete.setNom(request.getNom());
@@ -97,7 +96,7 @@ public class AthleteServiceImpl implements AthleteService {
     @Override
     public void supprimerAthlete(Long id) {
         if (!athleteRepository.existsById(id)) {
-            throw new RuntimeException("Athlète non trouvé avec l'ID : " + id);
+            throw new ResourceNotFoundException("Athlète", id);
         }
         athleteRepository.deleteById(id);
         log.debug("Athlète supprimé avec succès, ID : {}", id);

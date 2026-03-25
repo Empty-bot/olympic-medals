@@ -2,6 +2,7 @@ package com.polytech.olympic_medals.service.impl;
 
 import com.polytech.olympic_medals.dto.request.MedailleRequest;
 import com.polytech.olympic_medals.dto.response.*;
+import com.polytech.olympic_medals.exception.ResourceNotFoundException;
 import com.polytech.olympic_medals.model.*;
 import com.polytech.olympic_medals.repository.*;
 import com.polytech.olympic_medals.service.MedailleService;
@@ -30,18 +31,15 @@ public class MedailleServiceImpl implements MedailleService {
         log.debug("Enregistrement d'une médaille de type : {}", request.getType());
 
         Athlete athlete = athleteRepository.findById(request.getAthleteId())
-                .orElseThrow(() -> new RuntimeException(
-                    "Athlète non trouvé avec l'ID : " + request.getAthleteId()
+                .orElseThrow(() -> new ResourceNotFoundException("Athlète", request.getAthleteId()
                 ));
 
         Pays pays = paysRepository.findById(request.getPaysId())
-                .orElseThrow(() -> new RuntimeException(
-                    "Pays non trouvé avec l'ID : " + request.getPaysId()
+                .orElseThrow(() -> new ResourceNotFoundException("Pays", request.getPaysId()
                 ));
 
         Competition competition = competitionRepository.findById(request.getCompetitionId())
-                .orElseThrow(() -> new RuntimeException(
-                    "Compétition non trouvée avec l'ID : " + request.getCompetitionId()
+                .orElseThrow(() -> new ResourceNotFoundException("Compétition", request.getCompetitionId()
                 ));
 
         Medaille medaille = Medaille.builder()
@@ -61,8 +59,7 @@ public class MedailleServiceImpl implements MedailleService {
     @Transactional(readOnly = true)
     public MedailleResponse obtenirMedailleParId(Long id) {
         Medaille medaille = medailleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(
-                    "Médaille non trouvée avec l'ID : " + id
+                .orElseThrow(() -> new ResourceNotFoundException("Médaille", id
                 ));
         return toResponse(medaille);
     }
@@ -80,7 +77,7 @@ public class MedailleServiceImpl implements MedailleService {
     @Transactional(readOnly = true)
     public List<MedailleResponse> obtenirMedaillesParAthlete(Long athleteId) {
         if (!athleteRepository.existsById(athleteId)) {
-            throw new RuntimeException("Athlète non trouvé avec l'ID : " + athleteId);
+            throw new ResourceNotFoundException("Athlète", athleteId);
         }
         return medailleRepository.findByAthleteId(athleteId)
                 .stream()
@@ -92,7 +89,7 @@ public class MedailleServiceImpl implements MedailleService {
     @Transactional(readOnly = true)
     public List<MedailleResponse> obtenirMedaillesParCompetition(Long competitionId) {
         if (!competitionRepository.existsById(competitionId)) {
-            throw new RuntimeException("Compétition non trouvée avec l'ID : " + competitionId);
+            throw new ResourceNotFoundException("Compétition", competitionId);
         }
         return medailleRepository.findByCompetitionId(competitionId)
                 .stream()
@@ -122,12 +119,12 @@ public class MedailleServiceImpl implements MedailleService {
     @Transactional(readOnly = true)
     public ClassementResponse obtenirStatsPays(Long paysId) {
         if (!paysRepository.existsById(paysId)) {
-            throw new RuntimeException("Pays non trouvé avec l'ID : " + paysId);
+            throw new ResourceNotFoundException("Pays", paysId);
         }
 
         Object[] stats = medailleRepository.getStatsByPays(paysId);
         Pays pays = paysRepository.findById(paysId)
-            .orElseThrow(() -> new RuntimeException("Pays non trouvé avec l'ID : " + paysId));
+            .orElseThrow(() -> new ResourceNotFoundException("Pays", paysId));
 
         return ClassementResponse.builder()
                 .paysId(paysId)

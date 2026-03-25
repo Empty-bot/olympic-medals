@@ -2,6 +2,8 @@ package com.polytech.olympic_medals.service.impl;
 
 import com.polytech.olympic_medals.dto.request.PaysRequest;
 import com.polytech.olympic_medals.dto.response.PaysResponse;
+import com.polytech.olympic_medals.exception.DuplicateResourceException;
+import com.polytech.olympic_medals.exception.ResourceNotFoundException;
 import com.polytech.olympic_medals.model.Pays;
 import com.polytech.olympic_medals.repository.PaysRepository;
 import com.polytech.olympic_medals.service.PaysService;
@@ -26,7 +28,7 @@ public class PaysServiceImpl implements PaysService {
         log.debug("Création d'un nouveau pays avec le code : {}", request.getCode());
 
         if (paysRepository.existsByCode(request.getCode())) {
-            throw new IllegalArgumentException(
+            throw new DuplicateResourceException(
                 "Un pays avec le code " + request.getCode() + " existe déjà"
             );
         }
@@ -43,7 +45,7 @@ public class PaysServiceImpl implements PaysService {
     public PaysResponse obtenirPaysParId(Long id) {
         log.debug("Recherche du pays avec l'ID : {}", id);
         Pays pays = paysRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pays non trouvé avec l'ID : " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Pays", id));
         return toResponse(pays);
     }
 
@@ -61,11 +63,11 @@ public class PaysServiceImpl implements PaysService {
     public PaysResponse modifierPays(Long id, PaysRequest request) {
         log.debug("Modification du pays avec l'ID : {}", id);
         Pays pays = paysRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pays non trouvé avec l'ID : " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Pays", id));
 
         if (!pays.getCode().equals(request.getCode()) &&
                 paysRepository.existsByCode(request.getCode())) {
-            throw new IllegalArgumentException(
+            throw new DuplicateResourceException(
                 "Un pays avec le code " + request.getCode() + " existe déjà"
             );
         }
@@ -83,7 +85,7 @@ public class PaysServiceImpl implements PaysService {
     public void supprimerPays(Long id) {
         log.debug("Suppression du pays avec l'ID : {}", id);
         if (!paysRepository.existsById(id)) {
-            throw new RuntimeException("Pays non trouvé avec l'ID : " + id);
+            throw new ResourceNotFoundException("Pays", id);
         }
         paysRepository.deleteById(id);
         log.debug("Pays supprimé avec succès");
