@@ -154,4 +154,56 @@ class PaysServiceImplTest {
                 () -> paysService.supprimerPays(999L));
         verify(paysRepository, never()).deleteById(any());
     }
+
+    // modifierPays
+
+    @Test
+    @DisplayName("modifierPays : succès")
+    void modifierPays_succes() {
+        // GIVEN
+        PaysRequest request = PaysRequest.builder()
+                .code("SEN")
+                .nom("République du Sénégal")
+                .drapeau("🇸🇳")
+                .build();
+
+        when(paysRepository.findById(1L)).thenReturn(Optional.of(pays));
+        when(paysRepository.save(any(Pays.class))).thenReturn(
+                Pays.builder().id(1L).code("SEN").nom("République du Sénégal").drapeau("🇸🇳").build()
+        );
+
+        // WHEN
+        PaysResponse resultat = paysService.modifierPays(1L, request);
+
+        // THEN
+        assertThat(resultat).isNotNull();
+        assertThat(resultat.getNom()).isEqualTo("République du Sénégal");
+        verify(paysRepository, times(1)).save(any(Pays.class));
+    }
+
+    @Test
+    @DisplayName("modifierPays : échec si ID inexistant")
+    void modifierPays_idInexistant_lanceResourceNotFoundException() {
+        // GIVEN
+        when(paysRepository.findById(999L)).thenReturn(Optional.empty());
+
+        // WHEN + THEN
+        assertThrows(ResourceNotFoundException.class,
+                () -> paysService.modifierPays(999L, paysRequest));
+    }
+
+    @Test
+    @DisplayName("modifierPays : échec si nouveau code déjà pris par un autre pays")
+    void modifierPays_codeDuplique_lanceDuplicateResourceException() {
+        // GIVEN
+        PaysRequest request = PaysRequest.builder()
+                .code("FRA").nom("Sénégal").build();
+
+        when(paysRepository.findById(1L)).thenReturn(Optional.of(pays));
+        when(paysRepository.existsByCode("FRA")).thenReturn(true);
+
+        // WHEN + THEN
+        assertThrows(DuplicateResourceException.class,
+                () -> paysService.modifierPays(1L, request));
+    }
 }

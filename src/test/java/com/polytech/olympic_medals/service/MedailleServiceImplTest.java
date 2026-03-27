@@ -1,6 +1,7 @@
 package com.polytech.olympic_medals.service;
 
 import com.polytech.olympic_medals.dto.request.MedailleRequest;
+import com.polytech.olympic_medals.dto.response.ClassementResponse;
 import com.polytech.olympic_medals.dto.response.MedailleResponse;
 import com.polytech.olympic_medals.exception.ResourceNotFoundException;
 import com.polytech.olympic_medals.model.*;
@@ -178,5 +179,105 @@ class MedailleServiceImplTest {
         // WHEN + THEN
         assertThrows(ResourceNotFoundException.class,
                 () -> medailleService.obtenirMedaillesParAthlete(999L));
+    }
+
+    // obtenirStatsPays
+
+    @Test
+    @DisplayName("obtenirStatsPays : succès")
+    void obtenirStatsPays_succes() {
+        // GIVEN
+        Object[] stats = new Object[]{1L, 0L, 0L, 1L, 3L};
+
+        when(paysRepository.existsById(1L)).thenReturn(true);
+        when(medailleRepository.getStatsByPays(1L)).thenReturn(stats);
+        when(paysRepository.findById(1L)).thenReturn(Optional.of(
+                Pays.builder().id(1L).code("SEN").nom("Sénégal").drapeau("🇸🇳").build()
+        ));
+
+        // WHEN
+        ClassementResponse resultat = medailleService.obtenirStatsPays(1L);
+
+        // THEN
+        assertThat(resultat).isNotNull();
+        assertThat(resultat.getPaysCode()).isEqualTo("SEN");
+        assertThat(resultat.getNbOr()).isEqualTo(1L);
+        assertThat(resultat.getPoints()).isEqualTo(3L);
+    }
+
+    @Test
+    @DisplayName("obtenirStatsPays : échec si pays inexistant")
+    void obtenirStatsPays_paysInexistant_lanceResourceNotFoundException() {
+        // GIVEN
+        when(paysRepository.existsById(999L)).thenReturn(false);
+
+        // WHEN + THEN
+        assertThrows(ResourceNotFoundException.class,
+                () -> medailleService.obtenirStatsPays(999L));
+    }
+
+    // obtenirClassement
+
+    @Test
+    @DisplayName("obtenirClassement : par total (défaut)")
+    void obtenirClassement_parTotal() {
+        // GIVEN
+        Object[] row = new Object[]{1L, "Sénégal", "SEN", "🇸🇳", 1L, 0L, 0L, 1L, 3L};
+        when(medailleRepository.getClassementParTotal()).thenReturn(List.of(new Object[][]{row}));
+
+        // WHEN
+        List<ClassementResponse> resultat = medailleService.obtenirClassement("total");
+
+        // THEN
+        assertThat(resultat).hasSize(1);
+        assertThat(resultat.get(0).getRang()).isEqualTo(1);
+        assertThat(resultat.get(0).getPaysCode()).isEqualTo("SEN");
+        assertThat(resultat.get(0).getNbOr()).isEqualTo(1L);
+        assertThat(resultat.get(0).getTotal()).isEqualTo(1L);
+    }
+
+    @Test
+    @DisplayName("obtenirClassement : par or")
+    void obtenirClassement_parOr() {
+        // GIVEN
+        Object[] row = new Object[]{1L, "Sénégal", "SEN", "🇸🇳", 2L, 1L, 0L, 3L, 8L};
+        when(medailleRepository.getClassementParOr()).thenReturn(List.of(new Object[][]{row}));
+
+        // WHEN
+        List<ClassementResponse> resultat = medailleService.obtenirClassement("or");
+
+        // THEN
+        assertThat(resultat).hasSize(1);
+        assertThat(resultat.get(0).getNbOr()).isEqualTo(2L);
+        assertThat(resultat.get(0).getPoints()).isEqualTo(8L);
+    }
+
+    @Test
+    @DisplayName("obtenirClassement : par points")
+    void obtenirClassement_parPoints() {
+        // GIVEN
+        Object[] row = new Object[]{1L, "Sénégal", "SEN", "🇸🇳", 1L, 1L, 1L, 3L, 6L};
+        when(medailleRepository.getClassementParPoints()).thenReturn(List.of(new Object[][]{row}));
+
+        // WHEN
+        List<ClassementResponse> resultat = medailleService.obtenirClassement("points");
+
+        // THEN
+        assertThat(resultat).hasSize(1);
+        assertThat(resultat.get(0).getNbArgent()).isEqualTo(1L);
+        assertThat(resultat.get(0).getPoints()).isEqualTo(6L);
+    }
+
+    @Test
+    @DisplayName("obtenirClassement : liste vide si aucune médaille")
+    void obtenirClassement_aucuneMedaille_retourneListeVide() {
+        // GIVEN
+        when(medailleRepository.getClassementParTotal()).thenReturn(List.of(new Object[][]{}));
+
+        // WHEN
+        List<ClassementResponse> resultat = medailleService.obtenirClassement("total");
+
+        // THEN
+        assertThat(resultat).isEmpty();
     }
 }

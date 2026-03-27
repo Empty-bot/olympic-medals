@@ -201,4 +201,46 @@ class AthleteServiceImplTest {
                 () -> athleteService.supprimerAthlete(999L));
         verify(athleteRepository, never()).deleteById(any());
     }
+
+    // modifierAthlete
+
+    @Test
+    @DisplayName("modifierAthlete : succès")
+    void modifierAthlete_succes() {
+        // GIVEN
+        AthleteRequest request = AthleteRequest.builder()
+                .nom("Diallo").prenom("Moussa")
+                .dateNaissance(LocalDate.of(1995, 3, 15))
+                .discipline("Natation")
+                .paysId(1L)
+                .build();
+
+        Athlete athleteModifie = Athlete.builder()
+                .id(1L).nom("Diallo").prenom("Moussa")
+                .discipline("Natation").pays(pays)
+                .build();
+
+        when(athleteRepository.findById(1L)).thenReturn(Optional.of(athlete));
+        when(paysRepository.findById(1L)).thenReturn(Optional.of(pays));
+        when(athleteRepository.save(any(Athlete.class))).thenReturn(athleteModifie);
+
+        // WHEN
+        AthleteResponse resultat = athleteService.modifierAthlete(1L, request);
+
+        // THEN
+        assertThat(resultat).isNotNull();
+        assertThat(resultat.getDiscipline()).isEqualTo("Natation");
+        verify(athleteRepository, times(1)).save(any(Athlete.class));
+    }
+
+    @Test
+    @DisplayName("modifierAthlete : échec si ID inexistant")
+    void modifierAthlete_idInexistant_lanceResourceNotFoundException() {
+        // GIVEN
+        when(athleteRepository.findById(999L)).thenReturn(Optional.empty());
+
+        // WHEN + THEN
+        assertThrows(ResourceNotFoundException.class,
+                () -> athleteService.modifierAthlete(999L, athleteRequest));
+    }
 }

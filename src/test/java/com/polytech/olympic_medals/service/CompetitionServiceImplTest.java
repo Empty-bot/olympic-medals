@@ -145,4 +145,48 @@ class CompetitionServiceImplTest {
                 () -> competitionService.supprimerCompetition(999L));
         verify(competitionRepository, never()).deleteById(any());
     }
+
+    // modifierCompetition
+
+    @Test
+    @DisplayName("modifierCompetition : succès")
+    void modifierCompetition_succes() {
+        // GIVEN
+        CompetitionRequest request = CompetitionRequest.builder()
+                .nom("100m Hommes Final")
+                .discipline("Athlétisme")
+                .dateDebut(LocalDate.of(2026, 7, 15))
+                .statut(StatutCompetition.EN_COURS)
+                .build();
+
+        Competition competitionModifiee = Competition.builder()
+                .id(1L).nom("100m Hommes Final")
+                .discipline("Athlétisme")
+                .dateDebut(LocalDate.of(2026, 7, 15))
+                .statut(StatutCompetition.EN_COURS)
+                .build();
+
+        when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));
+        when(competitionRepository.save(any(Competition.class))).thenReturn(competitionModifiee);
+
+        // WHEN
+        CompetitionResponse resultat = competitionService.modifierCompetition(1L, request);
+
+        // THEN
+        assertThat(resultat).isNotNull();
+        assertThat(resultat.getNom()).isEqualTo("100m Hommes Final");
+        assertThat(resultat.getStatut()).isEqualTo(StatutCompetition.EN_COURS);
+        verify(competitionRepository, times(1)).save(any(Competition.class));
+    }
+
+    @Test
+    @DisplayName("modifierCompetition : échec si ID inexistant")
+    void modifierCompetition_idInexistant_lanceResourceNotFoundException() {
+        // GIVEN
+        when(competitionRepository.findById(999L)).thenReturn(Optional.empty());
+
+        // WHEN + THEN
+        assertThrows(ResourceNotFoundException.class,
+                () -> competitionService.modifierCompetition(999L, competitionRequest));
+    }
 }
