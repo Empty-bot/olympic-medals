@@ -122,7 +122,13 @@ public class MedailleServiceImpl implements MedailleService {
             throw new ResourceNotFoundException("Pays", paysId);
         }
 
-        Object[] stats = medailleRepository.getStatsByPays(paysId);
+        Object[] rawStats = medailleRepository.getStatsByPays(paysId);
+
+        // H2 encapsule le résultat dans un tableau imbriqué, MySQL ne le fait pas
+        Object[] stats = (rawStats.length == 1 && rawStats[0] instanceof Object[])
+                ? (Object[]) rawStats[0]
+                : rawStats;
+
         Pays pays = paysRepository.findById(paysId)
             .orElseThrow(() -> new ResourceNotFoundException("Pays", paysId));
 
