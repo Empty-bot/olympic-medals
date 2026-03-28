@@ -2,6 +2,7 @@ package com.polytech.olympic_medals.controller;
 
 import com.polytech.olympic_medals.dto.request.PaysRequest;
 import com.polytech.olympic_medals.dto.response.ApiResponse;
+import com.polytech.olympic_medals.dto.response.PageResponse;
 import com.polytech.olympic_medals.dto.response.PaysResponse;
 import com.polytech.olympic_medals.service.PaysService;
 import jakarta.validation.Valid;
@@ -10,6 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+
 
 import java.util.List;
 
@@ -36,6 +40,14 @@ public class PaysController {
         log.debug("GET /api/v1/pays");
         List<PaysResponse> pays = paysService.obtenirTousLesPays();
         return ResponseEntity.ok(ApiResponse.success(pays, "Liste des pays récupérée"));
+    }
+
+    @GetMapping("/pageable")
+    public ResponseEntity<ApiResponse<PageResponse<PaysResponse>>> obtenirTousLesPaysPageable(
+            @PageableDefault(size = 10, sort = "nom") Pageable pageable) {
+        log.debug("GET /api/v1/pays/pageable");
+        PageResponse<PaysResponse> page = paysService.obtenirTousLesPaysPageable(pageable);
+        return ResponseEntity.ok(ApiResponse.success(page, "Liste paginée des pays récupérée"));
     }
 
     @GetMapping("/{id}")

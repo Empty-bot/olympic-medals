@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.polytech.olympic_medals.dto.response.PageResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -79,6 +82,16 @@ public class PaysServiceImpl implements PaysService {
         Pays paysModifie = paysRepository.save(pays);
         log.debug("Pays modifié avec succès");
         return toResponse(paysModifie);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PageResponse<PaysResponse> obtenirTousLesPaysPageable(Pageable pageable) {
+        log.debug("Récupération des pays paginés : page={}, size={}",
+                pageable.getPageNumber(), pageable.getPageSize());
+        Page<PaysResponse> page = paysRepository.findAll(pageable)
+                .map(this::toResponse);
+        return PageResponse.from(page);
     }
 
     @Override

@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -143,6 +145,16 @@ public class MedailleServiceImpl implements MedailleService {
                 .total(stats[3] != null    ? ((Number) stats[3]).longValue() : 0)
                 .points(stats[4] != null   ? ((Number) stats[4]).longValue() : 0)
                 .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PageResponse<MedailleResponse> obtenirToutesLesMedaillesPageable(Pageable pageable) {
+        log.debug("Récupération des médailles paginées : page={}, size={}",
+                pageable.getPageNumber(), pageable.getPageSize());
+        Page<MedailleResponse> page = medailleRepository.findAll(pageable)
+                .map(this::toResponse);
+        return PageResponse.from(page);
     }
 
     // Méthodes de conversion privées

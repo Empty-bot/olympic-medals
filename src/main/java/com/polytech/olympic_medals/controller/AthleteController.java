@@ -3,6 +3,7 @@ package com.polytech.olympic_medals.controller;
 import com.polytech.olympic_medals.dto.request.AthleteRequest;
 import com.polytech.olympic_medals.dto.response.ApiResponse;
 import com.polytech.olympic_medals.dto.response.AthleteResponse;
+import com.polytech.olympic_medals.dto.response.PageResponse;
 import com.polytech.olympic_medals.service.AthleteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+
 
 import java.util.List;
 
@@ -36,6 +40,14 @@ public class AthleteController {
         log.debug("GET /api/v1/athletes");
         List<AthleteResponse> athletes = athleteService.obtenirTousLesAthletes();
         return ResponseEntity.ok(ApiResponse.success(athletes, "Liste des athlètes récupérée"));
+    }
+
+    @GetMapping("/pageable")
+    public ResponseEntity<ApiResponse<PageResponse<AthleteResponse>>> obtenirTousLesAthletesPageable(
+            @PageableDefault(size = 10, sort = "nom") Pageable pageable) {
+        log.debug("GET /api/v1/athletes/pageable");
+        PageResponse<AthleteResponse> page = athleteService.obtenirTousLesAthletesPageable(pageable);
+        return ResponseEntity.ok(ApiResponse.success(page, "Liste paginée des athlètes récupérée"));
     }
 
     @GetMapping("/{id}")

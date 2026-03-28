@@ -14,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.polytech.olympic_medals.dto.response.PageResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -91,6 +94,16 @@ public class AthleteServiceImpl implements AthleteService {
         athlete.setPays(pays);
 
         return toResponse(athleteRepository.save(athlete));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PageResponse<AthleteResponse> obtenirTousLesAthletesPageable(Pageable pageable) {
+        log.debug("Récupération des athlètes paginés : page={}, size={}",
+                pageable.getPageNumber(), pageable.getPageSize());
+        Page<AthleteResponse> page = athleteRepository.findAll(pageable)
+                .map(this::toResponse);
+        return PageResponse.from(page);
     }
 
     @Override

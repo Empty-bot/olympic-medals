@@ -2,6 +2,7 @@ package com.polytech.olympic_medals.service.impl;
 
 import com.polytech.olympic_medals.dto.request.CompetitionRequest;
 import com.polytech.olympic_medals.dto.response.CompetitionResponse;
+import com.polytech.olympic_medals.dto.response.PageResponse;
 import com.polytech.olympic_medals.exception.ResourceNotFoundException;
 import com.polytech.olympic_medals.model.Competition;
 import com.polytech.olympic_medals.model.StatutCompetition;
@@ -11,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -68,6 +72,16 @@ public class CompetitionServiceImpl implements CompetitionService {
         }
 
         return toResponse(competitionRepository.save(competition));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PageResponse<CompetitionResponse> obtenirToutesLesCompetitionsPageable(Pageable pageable) {
+        log.debug("Récupération des compétitions paginées : page={}, size={}",
+                pageable.getPageNumber(), pageable.getPageSize());
+        Page<CompetitionResponse> page = competitionRepository.findAll(pageable)
+                .map(this::toResponse);
+        return PageResponse.from(page);
     }
 
     @Override

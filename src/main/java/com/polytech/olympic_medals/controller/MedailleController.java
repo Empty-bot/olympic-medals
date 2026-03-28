@@ -3,6 +3,7 @@ package com.polytech.olympic_medals.controller;
 import com.polytech.olympic_medals.dto.request.MedailleRequest;
 import com.polytech.olympic_medals.dto.response.ApiResponse;
 import com.polytech.olympic_medals.dto.response.MedailleResponse;
+import com.polytech.olympic_medals.dto.response.PageResponse;
 import com.polytech.olympic_medals.service.MedailleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+
 
 import java.util.List;
 
@@ -37,6 +41,16 @@ public class MedailleController {
         List<MedailleResponse> medailles = medailleService.obtenirToutesLesMedailles();
         return ResponseEntity.ok(ApiResponse.success(medailles,
                 "Liste des médailles récupérée"));
+    }
+
+    @GetMapping("/pageable")
+    public ResponseEntity<ApiResponse<PageResponse<MedailleResponse>>> obtenirToutesLesMedaillesPageable(
+            @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+        log.debug("GET /api/v1/medailles/pageable");
+        PageResponse<MedailleResponse> page =
+                medailleService.obtenirToutesLesMedaillesPageable(pageable);
+        return ResponseEntity.ok(ApiResponse.success(page,
+                "Liste paginée des médailles récupérée"));
     }
 
     @GetMapping("/{id}")
