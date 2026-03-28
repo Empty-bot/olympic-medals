@@ -1,6 +1,7 @@
 package com.polytech.olympic_medals.service;
 
 import com.polytech.olympic_medals.dto.request.PaysRequest;
+import com.polytech.olympic_medals.dto.response.PageResponse;
 import com.polytech.olympic_medals.dto.response.PaysResponse;
 import com.polytech.olympic_medals.exception.DuplicateResourceException;
 import com.polytech.olympic_medals.exception.ResourceNotFoundException;
@@ -14,6 +15,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -125,6 +130,28 @@ class PaysServiceImplTest {
         // THEN
         assertThat(resultat).hasSize(1);
         assertThat(resultat.get(0).getCode()).isEqualTo("SEN");
+    }
+
+    // obtenirTousLesPaysPageable
+
+    @Test
+    @DisplayName("obtenirTousLesPaysPageable : retourne la page correcte")
+    void obtenirTousLesPaysPageable_retournePage() {
+        // GIVEN
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Pays> pagePays = new PageImpl<>(List.of(pays), pageable, 1);
+        when(paysRepository.findAll(pageable)).thenReturn(pagePays);
+
+        // WHEN
+        PageResponse<PaysResponse> resultat = paysService.obtenirTousLesPaysPageable(pageable);
+
+        // THEN
+        assertThat(resultat).isNotNull();
+        assertThat(resultat.getContenu()).hasSize(1);
+        assertThat(resultat.getTotalElements()).isEqualTo(1);
+        assertThat(resultat.getTotalPages()).isEqualTo(1);
+        assertThat(resultat.isPremiere()).isTrue();
+        assertThat(resultat.isDerniere()).isTrue();
     }
 
     // supprimerPays

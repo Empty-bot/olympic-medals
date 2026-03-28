@@ -2,6 +2,7 @@ package com.polytech.olympic_medals.service;
 
 import com.polytech.olympic_medals.dto.request.CompetitionRequest;
 import com.polytech.olympic_medals.dto.response.CompetitionResponse;
+import com.polytech.olympic_medals.dto.response.PageResponse;
 import com.polytech.olympic_medals.exception.ResourceNotFoundException;
 import com.polytech.olympic_medals.model.Competition;
 import com.polytech.olympic_medals.model.StatutCompetition;
@@ -14,6 +15,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -116,6 +121,28 @@ class CompetitionServiceImplTest {
         // THEN
         assertThat(resultat).hasSize(1);
         assertThat(resultat.get(0).getNom()).isEqualTo("100m Hommes");
+    }
+
+    // obtenirToutesLesCompetitionsPageable
+
+    @Test
+    @DisplayName("obtenirToutesLesCompetitionsPageable : retourne la page correcte")
+    void obtenirToutesLesCompetitionsPageable_retournePage() {
+        // GIVEN
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Competition> pageCompetition = new PageImpl<>(List.of(competition), pageable, 1);
+        when(competitionRepository.findAll(pageable)).thenReturn(pageCompetition);
+
+        // WHEN
+        PageResponse<CompetitionResponse> resultat =
+                competitionService.obtenirToutesLesCompetitionsPageable(pageable);
+
+        // THEN
+        assertThat(resultat).isNotNull();
+        assertThat(resultat.getContenu()).hasSize(1);
+        assertThat(resultat.getContenu().get(0).getNom()).isEqualTo("100m Hommes");
+        assertThat(resultat.getTotalElements()).isEqualTo(1);
+        assertThat(resultat.isPremiere()).isTrue();
     }
 
     // supprimerCompetition 

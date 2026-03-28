@@ -2,6 +2,7 @@ package com.polytech.olympic_medals.service;
 
 import com.polytech.olympic_medals.dto.request.AthleteRequest;
 import com.polytech.olympic_medals.dto.response.AthleteResponse;
+import com.polytech.olympic_medals.dto.response.PageResponse;
 import com.polytech.olympic_medals.exception.DuplicateResourceException;
 import com.polytech.olympic_medals.exception.ResourceNotFoundException;
 import com.polytech.olympic_medals.model.Athlete;
@@ -16,6 +17,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -172,6 +177,44 @@ class AthleteServiceImplTest {
         // WHEN + THEN
         assertThrows(ResourceNotFoundException.class,
                 () -> athleteService.obtenirAthleteParPays(999L));
+    }
+
+    // obtenirTousLesAthletes
+
+    @Test
+    @DisplayName("obtenirTousLesAthletes : retourne la liste complète")
+    void obtenirTousLesPays_retourneListe() {
+        // GIVEN
+        when(athleteRepository.findAll()).thenReturn(List.of(athlete));
+
+        // WHEN
+        List<AthleteResponse> resultat = athleteService.obtenirTousLesAthletes();
+
+        // THEN
+        assertThat(resultat).hasSize(1);
+        assertThat(resultat.get(0).getNom()).isEqualTo("Dia");
+    }
+
+    // obtenirTousLesAthletesPageable
+
+    @Test
+    @DisplayName("obtenirTousLesAthletesPageable : retourne la page correcte")
+    void obtenirTousLesAthletesPageable_retournePage() {
+        // GIVEN
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Athlete> pageAthlete = new PageImpl<>(List.of(athlete), pageable, 1);
+        when(athleteRepository.findAll(pageable)).thenReturn(pageAthlete);
+
+        // WHEN
+        PageResponse<AthleteResponse> resultat =
+                athleteService.obtenirTousLesAthletesPageable(pageable);
+
+        // THEN
+        assertThat(resultat).isNotNull();
+        assertThat(resultat.getContenu()).hasSize(1);
+        assertThat(resultat.getContenu().get(0).getNom()).isEqualTo("Dia");
+        assertThat(resultat.getTotalElements()).isEqualTo(1);
+        assertThat(resultat.isPremiere()).isTrue();
     }
 
     // supprimerAthlete 

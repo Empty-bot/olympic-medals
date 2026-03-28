@@ -65,6 +65,22 @@ class CompetitionControllerIntegrationTest {
                 .andExpect(jsonPath("$.data[0].nom").value("100m Hommes"));
     }
 
+    // GET /api/v1/competitions/pageable
+
+    @Test
+    @DisplayName("GET /api/v1/competitions/pageable : retourne la liste paginée")
+    void obtenirToutesLesCompetitionsPageable_retournePage() throws Exception {
+        mockMvc.perform(get("/api/v1/competitions/pageable")
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data.contenu", hasSize(1)))
+                .andExpect(jsonPath("$.data.contenu[0].nom").value("100m Hommes"))
+                .andExpect(jsonPath("$.data.totalElements").value(1))
+                .andExpect(jsonPath("$.data.premiere").value(true));
+    }
+
     // GET /api/v1/competitions/{id}
 
     @Test

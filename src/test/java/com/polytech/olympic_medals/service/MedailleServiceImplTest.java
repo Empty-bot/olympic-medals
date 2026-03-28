@@ -3,6 +3,7 @@ package com.polytech.olympic_medals.service;
 import com.polytech.olympic_medals.dto.request.MedailleRequest;
 import com.polytech.olympic_medals.dto.response.ClassementResponse;
 import com.polytech.olympic_medals.dto.response.MedailleResponse;
+import com.polytech.olympic_medals.dto.response.PageResponse;
 import com.polytech.olympic_medals.exception.ResourceNotFoundException;
 import com.polytech.olympic_medals.model.*;
 import com.polytech.olympic_medals.repository.*;
@@ -14,6 +15,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -179,6 +184,44 @@ class MedailleServiceImplTest {
         // WHEN + THEN
         assertThrows(ResourceNotFoundException.class,
                 () -> medailleService.obtenirMedaillesParAthlete(999L));
+    }
+
+    // obtenirToutesLesMedailles
+
+    @Test
+    @DisplayName("obtenirToutesLesMedailles : succès")
+    void obtenirToutesLesMedailles_succes() {
+        // GIVEN
+        when(medailleRepository.findAll()).thenReturn(List.of(medaille));
+
+        // WHEN 
+        List<MedailleResponse> resultat = medailleService.obtenirToutesLesMedailles();
+
+        // THEN
+        assertThat(resultat).hasSize(1);
+        assertThat(resultat.get(0).getType()).isEqualTo(TypeMedaille.OR);
+    }
+
+    // obtenirToutesLesMedaillesPageable
+
+    @Test
+    @DisplayName("obtenirToutesLesMedaillesPageable : retourne la page correcte")
+    void obtenirToutesLesMedaillesPageable_retournePage() {
+        // GIVEN
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Medaille> pageMedaille = new PageImpl<>(List.of(medaille), pageable, 1);
+        when(medailleRepository.findAll(pageable)).thenReturn(pageMedaille);
+
+        // WHEN
+        PageResponse<MedailleResponse> resultat =
+                medailleService.obtenirToutesLesMedaillesPageable(pageable);
+
+        // THEN
+        assertThat(resultat).isNotNull();
+        assertThat(resultat.getContenu()).hasSize(1);
+        assertThat(resultat.getContenu().get(0).getType()).isEqualTo(TypeMedaille.OR);
+        assertThat(resultat.getTotalElements()).isEqualTo(1);
+        assertThat(resultat.isPremiere()).isTrue();
     }
 
     // obtenirStatsPays

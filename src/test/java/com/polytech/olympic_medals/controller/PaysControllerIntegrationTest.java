@@ -59,6 +59,35 @@ class PaysControllerIntegrationTest {
                 .andExpect(jsonPath("$.data[0].code").value("SEN"));
     }
 
+    // GET /api/v1/pays/pageable
+
+    @Test
+    @DisplayName("GET /api/v1/pays/pageable : retourne la liste paginée")
+    void obtenirTousLesPaysPageable_retournePage() throws Exception {
+        mockMvc.perform(get("/api/v1/pays/pageable")
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.data.contenu", hasSize(1)))
+                .andExpect(jsonPath("$.data.pageActuelle").value(0))
+                .andExpect(jsonPath("$.data.taillePage").value(10))
+                .andExpect(jsonPath("$.data.totalElements").value(1))
+                .andExpect(jsonPath("$.data.premiere").value(true))
+                .andExpect(jsonPath("$.data.derniere").value(true));
+    }
+
+    @Test
+    @DisplayName("GET /api/v1/pays/pageable : pagination avec tri")
+    void obtenirTousLesPaysPageable_avecTri() throws Exception {
+        mockMvc.perform(get("/api/v1/pays/pageable")
+                        .param("page", "0")
+                        .param("size", "5")
+                        .param("sort", "nom,asc"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.contenu[0].code").value("SEN"));
+    }
+
     // GET /api/v1/pays/{id} 
 
     @Test
