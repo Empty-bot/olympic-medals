@@ -95,34 +95,37 @@ Les tables sont créées automatiquement par Hibernate au premier démarrage.
 
 ### Pays
 
-| Méthode | Endpoint            | Description         |
-| ------- | ------------------- | ------------------- |
-| GET     | `/api/v1/pays`      | Liste tous les pays |
-| GET     | `/api/v1/pays/{id}` | Détails d'un pays   |
-| POST    | `/api/v1/pays`      | Créer un pays       |
-| PUT     | `/api/v1/pays/{id}` | Modifier un pays    |
-| DELETE  | `/api/v1/pays/{id}` | Supprimer un pays   |
+| Méthode | Endpoint                | Description            |
+| ------- | ----------------------- | ---------------------- |
+| GET     | `/api/v1/pays`          | Liste tous les pays    |
+| GET     | `/api/v1/pays/{id}`     | Détails d'un pays      |
+| POST    | `/api/v1/pays`          | Créer un pays          |
+| PUT     | `/api/v1/pays/{id}`     | Modifier un pays       |
+| DELETE  | `/api/v1/pays/{id}`     | Supprimer un pays      |
+| GET     | `/api/v1/pays/pageable` | Liste paginée des pays |
 
 ### Athlètes
 
-| Méthode | Endpoint                         | Description             |
-| ------- | -------------------------------- | ----------------------- |
-| GET     | `/api/v1/athletes`               | Liste tous les athlètes |
-| GET     | `/api/v1/athletes/{id}`          | Détails d'un athlète    |
-| GET     | `/api/v1/athletes/pays/{paysId}` | Athlètes d'un pays      |
-| POST    | `/api/v1/athletes`               | Créer un athlète        |
-| PUT     | `/api/v1/athletes/{id}`          | Modifier un athlète     |
-| DELETE  | `/api/v1/athletes/{id}`          | Supprimer un athlète    |
+| Méthode | Endpoint                         | Description                |
+| ------- | -------------------------------- | -------------------------- |
+| GET     | `/api/v1/athletes`               | Liste tous les athlètes    |
+| GET     | `/api/v1/athletes/{id}`          | Détails d'un athlète       |
+| GET     | `/api/v1/athletes/pays/{paysId}` | Athlètes d'un pays         |
+| POST    | `/api/v1/athletes`               | Créer un athlète           |
+| PUT     | `/api/v1/athletes/{id}`          | Modifier un athlète        |
+| DELETE  | `/api/v1/athletes/{id}`          | Supprimer un athlète       |
+| GET     | `/api/v1/athletes/pageable`      | Liste paginée des athlètes |
 
 ### Compétitions
 
-| Méthode | Endpoint                    | Description                   |
-| ------- | --------------------------- | ----------------------------- |
-| GET     | `/api/v1/competitions`      | Liste toutes les compétitions |
-| GET     | `/api/v1/competitions/{id}` | Détails d'une compétition     |
-| POST    | `/api/v1/competitions`      | Créer une compétition         |
-| PUT     | `/api/v1/competitions/{id}` | Modifier une compétition      |
-| DELETE  | `/api/v1/competitions/{id}` | Supprimer une compétition     |
+| Méthode | Endpoint                        | Description                    |
+| ------- | ------------------------------- | ------------------------------ |
+| GET     | `/api/v1/competitions`          | Liste toutes les compétitions  |
+| GET     | `/api/v1/competitions/{id}`     | Détails d'une compétition      |
+| POST    | `/api/v1/competitions`          | Créer une compétition          |
+| PUT     | `/api/v1/competitions/{id}`     | Modifier une compétition       |
+| DELETE  | `/api/v1/competitions/{id}`     | Supprimer une compétition      |
+| GET     | `/api/v1/competitions/pageable` | Liste paginée des compétitions |
 
 ### Médailles
 
@@ -133,6 +136,7 @@ Les tables sont créées automatiquement par Hibernate au premier démarrage.
 | GET     | `/api/v1/medailles/athlete/{athleteId}`         | Médailles d'un athlète      |
 | GET     | `/api/v1/medailles/competition/{competitionId}` | Médailles d'une compétition |
 | POST    | `/api/v1/medailles`                             | Enregistrer une médaille    |
+| GET     | `/api/v1/medailles/pageable`                    | Liste paginée des médailles |
 
 ### Classement
 
@@ -189,6 +193,41 @@ Réponse :
     "drapeau": "🇸🇳"
   },
   "timestamp": "2026-03-27T10:30:00"
+}
+```
+
+### Pagination
+
+Les endpoints `/pageable` supportent les paramètres suivants :
+
+| Paramètre | Description                   | Défaut    |
+| --------- | ----------------------------- | --------- |
+| `page`    | Numéro de page (commence à 0) | 0         |
+| `size`    | Nombre d'éléments par page    | 10        |
+| `sort`    | Champ et direction de tri     | `nom,asc` |
+
+Exemple :
+
+```bash
+curl "http://localhost:8080/api/v1/athletes/pageable?page=0&size=5&sort=nom,asc"
+```
+
+Réponse :
+
+```json
+{
+  "success": true,
+  "message": "Liste paginée des athlètes récupérée",
+  "data": {
+    "contenu": [...],
+    "pageActuelle": 0,
+    "totalPages": 3,
+    "totalElements": 15,
+    "taillePage": 5,
+    "premiere": true,
+    "derniere": false
+  },
+  "timestamp": "..."
 }
 ```
 
