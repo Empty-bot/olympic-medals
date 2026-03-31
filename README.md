@@ -272,7 +272,7 @@ mvn test
 xdg-open target/site/jacoco/index.html
 ```
 
-Couverture actuelle : **96%**
+Couverture actuelle : **95%**
 
 ### Structure des tests
 
@@ -295,3 +295,40 @@ src/test/
 ```
 
 ---
+
+## Collections Postman
+
+Deux collections Postman sont disponibles à la racine du projet.
+
+### 1. Collection de tests — `olympic-medals-postman-collection.json`
+
+Couvre tous les endpoints de l'API avec des tests automatisés.
+Utile pour vérifier que l'API fonctionne correctement après chaque modification.
+
+### 2. Collection de démo — `olympic-medals-postman-demo.json`
+
+Suit un scénario réaliste en 7 étapes :
+
+| Étape | Contenu                                                 |
+| ----- | ------------------------------------------------------- |
+| 1     | Création de 3 pays (SEN, FRA, USA)                      |
+| 2     | Création de 4 athlètes                                  |
+| 3     | Création de 3 compétitions                              |
+| 4     | Attribution de 6 médailles                              |
+| 5     | Consultation du classement (3 modes de tri)             |
+| 6     | Pagination et filtres avancés                           |
+| 7     | Démonstration de la gestion des erreurs (404, 400, 409) |
+
+### Importer dans Postman
+
+1. Ouvrir Postman
+2. Cliquer sur **Import**
+3. Sélectionner le fichier `.json` souhaité
+4. Sélectionner l'environnement `Local`
+5. Lancer l'application puis exécuter la collection via **Run collection**
+
+> Vider la base avant la démo pour partir d'un état propre :
+>
+> ```bash
+> mysql -u olympic_user -p olympic_medals -e "SET FOREIGN_KEY_CHECKS=0; TRUNCATE medailles; TRUNCATE athletes; TRUNCATE competitions; TRUNCATE pays; SET FOREIGN_KEY_CHECKS=1;"
+> ```
