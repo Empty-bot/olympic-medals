@@ -1,0 +1,1167 @@
+{
+  "info": {
+    "_postman_id": "7c57b224-eaa8-4993-a0c7-49a5c9c3bb17",
+    "name": "Olympic Medal Tracker - Démo",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53611496",
+    "_collection_link": "https://go.postman.co/collection/53611496-7c57b224-eaa8-4993-a0c7-49a5c9c3bb17?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Création des pays",
+      "item": [
+        {
+          "name": "Sénégal",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.success) {",
+                  "    pm.environment.set(\"paysIdSen\", response.data.id);",
+                  "}",
+                  "pm.test(\"Sénégal créé\", () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"code\": \"SEN\",\n    \"nom\": \"Sénégal\",\n    \"drapeau\": \"🇸🇳\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/pays",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pays"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "France",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.success) {",
+                  "    pm.environment.set(\"paysIdFra\", response.data.id);",
+                  "}",
+                  "pm.test(\"France créée\", () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"code\": \"FRA\",\n    \"nom\": \"France\",\n    \"drapeau\": \"🇫🇷\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/pays",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pays"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "USA",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.success) {",
+                  "    pm.environment.set(\"paysIdUsa\", response.data.id);",
+                  "}",
+                  "pm.test(\"USA créé\", () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"code\": \"USA\",\n    \"nom\": \"États-Unis\",\n    \"drapeau\": \"🇺🇸\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/pays",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pays"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Création des athlètes",
+      "item": [
+        {
+          "name": "Athlète SEN 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.success) {",
+                  "    pm.environment.set(\"athleteIdSen1\", response.data.id);",
+                  "}",
+                  "pm.test(\"Athlète SEN 1 créé\", () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nom\": \"Faye\",\n    \"prenom\": \"Ibrahima\",\n    \"dateNaissance\": \"1998-04-12\",\n    \"discipline\": \"Sprint\",\n    \"paysId\": {{paysIdSen}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/athletes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "athletes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Athlète SEN 2",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.success) {",
+                  "    pm.environment.set(\"athleteIdSen2\", response.data.id);",
+                  "}",
+                  "pm.test(\"Athlète SEN 2 créé\", () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nom\": \"Diallo\",\n    \"prenom\": \"Aissatou\",\n    \"dateNaissance\": \"2000-08-23\",\n    \"discipline\": \"Natation\",\n    \"paysId\": {{paysIdSen}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/athletes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "athletes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Athlète FRA 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.success) {",
+                  "    pm.environment.set(\"athleteIdFra1\", response.data.id);",
+                  "}",
+                  "pm.test(\"Athlète FRA 1 créé\", () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nom\": \"Dupont\",\n    \"prenom\": \"Claire\",\n    \"dateNaissance\": \"1997-11-05\",\n    \"discipline\": \"Judo\",\n    \"paysId\": {{paysIdFra}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/athletes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "athletes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Athlète USA 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.success) {",
+                  "    pm.environment.set(\"athleteIdUsa1\", response.data.id);",
+                  "}",
+                  "pm.test(\"Athlète USA 1 créé\", () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nom\": \"Johnson\",\n    \"prenom\": \"Marcus\",\n    \"dateNaissance\": \"1996-02-18\",\n    \"discipline\": \"Basketball\",\n    \"paysId\": {{paysIdUsa}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/athletes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "athletes"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Création des compétitions",
+      "item": [
+        {
+          "name": "Compétition Sprint",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.success) {",
+                  "    pm.environment.set(\"competitionIdSprint\", response.data.id);",
+                  "}",
+                  "pm.test(\"Compétition Sprint créée\", () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nom\": \"100m Hommes\",\n    \"discipline\": \"Athlétisme\",\n    \"dateDebut\": \"2026-07-15\",\n    \"dateFin\": \"2026-07-15\",\n    \"statut\": \"TERMINEE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/competitions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "competitions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Compétition Natation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.success) {",
+                  "    pm.environment.set(\"competitionIdNatation\", response.data.id);",
+                  "}",
+                  "pm.test(\"Compétition Natation créée\", () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nom\": \"200m Nage Libre\",\n    \"discipline\": \"Natation\",\n    \"dateDebut\": \"2026-07-16\",\n    \"dateFin\": \"2026-07-16\",\n    \"statut\": \"TERMINEE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/competitions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "competitions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Compétition Judo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.success) {",
+                  "    pm.environment.set(\"competitionIdJudo\", response.data.id);",
+                  "}",
+                  "pm.test(\"Compétition Judo créée\", () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nom\": \"Judo -70kg Femmes\",\n    \"discipline\": \"Judo\",\n    \"dateDebut\": \"2026-07-17\",\n    \"dateFin\": \"2026-07-17\",\n    \"statut\": \"TERMINEE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/competitions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "competitions"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Attribution des médailles",
+      "item": [
+        {
+          "name": "Médaille OR — Faye (SEN) — Sprint",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Médaille OR SEN créée\", () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"type\": \"OR\",\n    \"dateObtention\": \"2026-07-15\",\n    \"athleteId\": {{athleteIdSen1}},\n    \"paysId\": {{paysIdSen}},\n    \"competitionId\": {{competitionIdSprint}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/medailles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "medailles"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Médaille ARGENT — Johnson (USA) — Sprint",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Médaille ARGENT USA créée\", () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"type\": \"ARGENT\",\n    \"dateObtention\": \"2026-07-15\",\n    \"athleteId\": {{athleteIdUsa1}},\n    \"paysId\": {{paysIdUsa}},\n    \"competitionId\": {{competitionIdSprint}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/medailles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "medailles"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Médaille BRONZE — Dupont (FRA) — Sprint",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Médaille BRONZE FRA créée\", () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"type\": \"BRONZE\",\n    \"dateObtention\": \"2026-07-15\",\n    \"athleteId\": {{athleteIdFra1}},\n    \"paysId\": {{paysIdFra}},\n    \"competitionId\": {{competitionIdSprint}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/medailles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "medailles"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Médaille OR — Diallo (SEN) — Natation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Médaille OR SEN 2 créée\", () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"type\": \"OR\",\n    \"dateObtention\": \"2026-07-16\",\n    \"athleteId\": {{athleteIdSen2}},\n    \"paysId\": {{paysIdSen}},\n    \"competitionId\": {{competitionIdNatation}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/medailles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "medailles"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Médaille OR — Dupont (FRA) — Judo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Médaille OR FRA créée\", () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"type\": \"OR\",\n    \"dateObtention\": \"2026-07-17\",\n    \"athleteId\": {{athleteIdFra1}},\n    \"paysId\": {{paysIdFra}},\n    \"competitionId\": {{competitionIdJudo}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/medailles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "medailles"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Médaille ARGENT — Faye (SEN) — Judo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Médaille ARGENT SEN créée\", () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"type\": \"ARGENT\",\n    \"dateObtention\": \"2026-07-17\",\n    \"athleteId\": {{athleteIdSen1}},\n    \"paysId\": {{paysIdSen}},\n    \"competitionId\": {{competitionIdJudo}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/medailles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "medailles"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Classement",
+      "item": [
+        {
+          "name": "Classement par total",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"SEN en tête\", () => {",
+                  "    pm.expect(pm.response.json().data[0].paysCode).to.eql(\"SEN\");",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/classement",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "classement"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Classement par or",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"SEN en tête par or\", () => {",
+                  "    pm.expect(pm.response.json().data[0].paysCode).to.eql(\"SEN\");",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/classement?tri=or",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "classement"
+              ],
+              "query": [
+                {
+                  "key": "tri",
+                  "value": "or"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Classement par points",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Points SEN corrects\", () => {",
+                  "    pm.expect(pm.response.json().data[0].points).to.eql(8);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/classement?tri=points",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "classement"
+              ],
+              "query": [
+                {
+                  "key": "tri",
+                  "value": "points"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Stats Sénégal",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const data = pm.response.json().data;",
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"2 médailles d'or\", () => pm.expect(data.nbOr).to.eql(2));",
+                  "pm.test(\"1 médaille d'argent\", () => pm.expect(data.nbArgent).to.eql(1));",
+                  "pm.test(\"8 points\", () => pm.expect(data.points).to.eql(8));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/classement/pays/{{paysIdSen}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "classement",
+                "pays",
+                "{{paysIdSen}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Fonctionnalités avancées",
+      "item": [
+        {
+          "name": "Athlètes paginés — page 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const data = pm.response.json().data;",
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"2 éléments par page\", () => pm.expect(data.contenu.length).to.eql(2));",
+                  "pm.test(\"4 athlètes au total\", () => pm.expect(data.totalElements).to.eql(4));",
+                  "pm.test(\"2 pages au total\", () => pm.expect(data.totalPages).to.eql(2));",
+                  "pm.test(\"Première page\", () => pm.expect(data.premiere).to.be.true);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/athletes/pageable?page=o&size=2&sort=nom,asc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "athletes",
+                "pageable"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "o",
+                  "type": "text"
+                },
+                {
+                  "key": "size",
+                  "value": "2",
+                  "type": "text"
+                },
+                {
+                  "key": "sort",
+                  "value": "nom,asc",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Athlètes paginés — page 2",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const data = pm.response.json().data;",
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Dernière page\", () => pm.expect(data.derniere).to.be.true);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/athletes/pageable?page=1&size=2&sort=nom,asc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "athletes",
+                "pageable"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "type": "text"
+                },
+                {
+                  "key": "size",
+                  "value": "2",
+                  "type": "text"
+                },
+                {
+                  "key": "sort",
+                  "value": "nom,asc",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Médailles de Faye",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const data = pm.response.json().data;",
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"2 médailles pour Faye\", () => pm.expect(data.length).to.eql(2));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/medailles/athlete/{{athleteIdSen1}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "medailles",
+                "athlete",
+                "{{athleteIdSen1}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Gestion des erreurs",
+      "item": [
+        {
+          "name": "Pays inexistant — 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status 404\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"Success false\", () => pm.expect(pm.response.json().success).to.be.false);",
+                  "pm.test(\"Message d'erreur présent\", () => {",
+                  "    pm.expect(pm.response.json().message).to.include(\"non trouvé\");",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/pays/9999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pays",
+                "9999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Pays invalide — 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Erreurs de validation présentes\", () => {",
+                  "    const data = pm.response.json().data;",
+                  "    pm.expect(data).to.have.property(\"code\");",
+                  "    pm.expect(data).to.have.property(\"nom\");",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"code\": \"\",\n    \"nom\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/pays",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pays"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Pays dupliqué — 409",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status 409\", () => pm.response.to.have.status(409));",
+                  "pm.test(\"Message doublon\", () => {",
+                  "    pm.expect(pm.response.json().message).to.include(\"existe déjà\");",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"code\": \"SEN\",\n    \"nom\": \"Sénégal bis\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/pays",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pays"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
